@@ -29,6 +29,41 @@ def indicacion(titulo):
     print(f"{espacio}{titulo}{espacio}")
     print(linea)
 
+def display_mensaje(a):
+    font = pygame.font.Font(None, 64)
+    text_surface = font.render(a, True, WHITE)
+    text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    window.blit(text_surface, text_rect)
+
+def draw_matrix():
+    for row in range(ROWS):
+        for col in range(COLS):
+            value = T[row][col]
+
+            if isinstance(value, int):
+                # Dibujar número
+                font = pygame.font.Font(None, 36)
+                text_surface = font.render(str(value), True, WHITE)
+                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
+                window.blit(text_surface, text_rect)
+            elif value == 'R':
+                # Dibujar círculo rojo oscuro
+                pygame.draw.circle(window, DARK_RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
+            elif value == 'r':
+                # Dibujar círculo rojo
+                pygame.draw.circle(window, RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
+            elif value == 'A':
+                # Dibujar círculo azul oscuro
+                pygame.draw.circle(window, DARK_BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
+            elif value == 'a':
+                # Dibujar círculo azul
+                pygame.draw.circle(window, BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
+            elif value.isdigit():
+                font = pygame.font.Font(None, 36)
+                text_surface = font.render(value, True, WHITE)
+                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
+                window.blit(text_surface, text_rect)
+
 # Inicializar Pygame
 pygame.init()
 
@@ -46,12 +81,6 @@ RED = (255, 0, 0)
 DARK_BLUE = (0, 0, 139)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
-
-def display_mensaje(a):
-    font = pygame.font.Font(None, 64)
-    text_surface = font.render(a, True, WHITE)
-    text_rect = text_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    window.blit(text_surface, text_rect)
 
 #############Inicializar Tablero#################
 filas = 8
@@ -243,43 +272,9 @@ def establecerAzul(a,b):
     return True
 #################################################
 
-
-
-
 # Crear la ventana
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Snake vs Snake')
-
-# Función para dibujar la matriz en la ventana
-# Función para dibujar la matriz en pantalla
-def draw_matrix():
-    for row in range(ROWS):
-        for col in range(COLS):
-            value = T[row][col]
-
-            if isinstance(value, int):
-                # Dibujar número
-                font = pygame.font.Font(None, 36)
-                text_surface = font.render(str(value), True, WHITE)
-                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
-                window.blit(text_surface, text_rect)
-            elif value == 'R':
-                # Dibujar círculo rojo oscuro
-                pygame.draw.circle(window, DARK_RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'r':
-                # Dibujar círculo rojo
-                pygame.draw.circle(window, RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'A':
-                # Dibujar círculo azul oscuro
-                pygame.draw.circle(window, DARK_BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'a':
-                # Dibujar círculo azul
-                pygame.draw.circle(window, BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value.isdigit():
-                font = pygame.font.Font(None, 36)
-                text_surface = font.render(value, True, WHITE)
-                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
-                window.blit(text_surface, text_rect)
 
 # Función principal
 def main():
@@ -335,7 +330,6 @@ def main():
             pygame.display.flip()
             time.sleep(10)
             break
-
 
 if __name__ == '__main__':
     main()
