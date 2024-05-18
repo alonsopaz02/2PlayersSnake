@@ -102,7 +102,7 @@ def main():
                         if(juego.establecerRojo(a,b)==False):
                             break
                     else:
-                        posicion=ia.elegir_posicion_facil(juego.estado.get_x_cabezaAzul(),juego.estado.get_y_cabezaAzul())
+                        posicion=ia.elegir_posicion_facil(juego.estado.get_x_cabezaAzul(),juego.estado.get_y_cabezaAzul(),juego.estado.get_tablero().get_casillas())
                         a = posicion[0]
                         b = posicion[1]
                         print(a)

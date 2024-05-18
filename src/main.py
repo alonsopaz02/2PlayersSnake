@@ -1,4 +1,5 @@
 from juego import Juego
+from IAJugador import IAJugador
 import pygame
 import sys
 import time
@@ -58,6 +59,7 @@ pygame.display.set_caption('Snake vs Snake')
 # Función principal
 def main():
     juego = Juego("R")
+    ia = IAJugador("facil",[999,999])
     
     running = True
 
@@ -90,6 +92,7 @@ def main():
                         else:
                             juego.movimientos = juego.movimientos + 1
                     elif(juego.estado.get_turno()== "A"):
+                        
                         if(juego.establecerPrimeraFichaAzul(a,b)==False):
                             break
                         else:
