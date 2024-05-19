@@ -1,65 +1,15 @@
-from juego import Juego
-from IAJugador import IAJugador
 import pygame
 import sys
 import time
 
+from gui.interfaz import Interfaz
+from easyIA import IAFacil
+from game.juego import Juego
 
-def draw_matrix(T):
-    for row in range(ROWS):
-        for col in range(COLS):
-            value = T[row][col]
-
-            if isinstance(value, int):
-                # Dibujar número
-                font = pygame.font.Font(None, 36)
-                text_surface = font.render(str(value), True, WHITE)
-                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
-                window.blit(text_surface, text_rect)
-            elif value == 'R':
-                # Dibujar círculo rojo oscuro
-                pygame.draw.circle(window, DARK_RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'r':
-                # Dibujar círculo rojo
-                pygame.draw.circle(window, RED, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'A':
-                # Dibujar círculo azul oscuro
-                pygame.draw.circle(window, DARK_BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value == 'a':
-                # Dibujar círculo azul
-                pygame.draw.circle(window, BLUE, (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), SQUARE_SIZE // 3)
-            elif value.isdigit():
-                font = pygame.font.Font(None, 36)
-                text_surface = font.render(value, True, WHITE)
-                text_rect = text_surface.get_rect(center=(col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2))
-                window.blit(text_surface, text_rect)
-
-# Inicializar Pygame
-pygame.init()
-
-# Dimensiones de la ventana y del tablero
-WIDTH = 800
-HEIGHT = 800
-ROWS = 8
-COLS = 8
-SQUARE_SIZE = WIDTH // COLS
-
-# Definir colores
-BLACK = (0, 0, 0)
-DARK_RED = (139, 0, 0)
-RED = (255, 0, 0)
-DARK_BLUE = (0, 0, 139)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
-
-# Crear la ventana
-window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Snake vs Snake')
-
-# Función principal
 def main():
     juego = Juego("R")
-    ia = IAJugador("facil",[999,999])
+    ia = IAFacil("Intermedio")
+    interfaz = Interfaz(800, 800, 8, 8)
     
     running = True
 
@@ -82,8 +32,8 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                a = y // SQUARE_SIZE
-                b = x // SQUARE_SIZE
+                a = y // interfaz.square_size
+                b = x // interfaz.square_size
 
                 if(juego.movimientos<=1):
                     if(juego.estado.get_turno() == "R"):
@@ -102,16 +52,20 @@ def main():
                         if(juego.establecerRojo(a,b)==False):
                             break
                     else:
+                        mejor_juego = ia.decidir_movimiento(juego)
+                        a, b = mejor_juego
+                        print(a)
+                        print(b) 
                         if(juego.establecerAzul(a,b)==False):
                             break
-        window.fill(BLACK)
-        draw_matrix(juego.estado.get_tablero().get_casillas())
-        print("Turno de " + juego.estado.get_turno())
-        pygame.display.flip()
+        interfaz.window.fill(interfaz.BLACK)
+        interfaz.draw_matrix(juego.estado.get_tablero().get_casillas())
+        interfaz.draw_message("Turno de " + juego.estado.get_turno())
+        interfaz.update_display()
 
         if(ganador != "0"):
             print("Gana "+ ganador)
-            pygame.display.flip()
+            interfaz.update_display()
             time.sleep(10)
             break
 
